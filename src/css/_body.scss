@@ -1,3 +1,24 @@
 body{
-	font-family: $fontBase;
+	font-family: $fontMontserrat;
+
+	a{
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.container{
+		max-width: 1214px;
+		margin: 0 auto;
+	}
+
+	.pc{
+		@include SP{
+			display: none!important;
+		}
+	}
+	.sp{
+		@include PC{
+			display: none!important;
+		}
+	}
 }

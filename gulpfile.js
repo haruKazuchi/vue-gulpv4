@@ -5,6 +5,10 @@ const concat = require('gulp-concat');
 const browserSync  = require('browser-sync');
 const autoprefixer = require('gulp-autoprefixer');
 const babel = require('gulp-babel');
+const uglify = require('gulp-uglify');
+const webpackStream = require("webpack-stream");
+const webpack = require("webpack");
+const webpackConfig = require("./webpack.config");
 
 const CONF = {
 	SASS : {
@@ -15,6 +19,9 @@ const CONF = {
 		SOURCE : 'src/js/app/**/*.js',
 		LIB   : 'src/js/lib/**/*.js',
 		OUTPUT : './public/assets/js',
+	},
+	HTML : {
+		SOURCE : './public/**/*.html',
 	},
 	BROWSERSYNC : {
 		DOCUMENT_ROOT : './public',
@@ -37,15 +44,31 @@ function css() {
 
 function jslib() {
   return src(CONF.JS.LIB, { sourcemaps: true })
+		.pipe(
+			babel({
+				presets: ['@babel/env'],
+			}),
+		)
     .pipe(concat('lib.min.js'))
+		.pipe(uglify())
     .pipe(dest(CONF.JS.OUTPUT, { sourcemaps: true }))
 }
 
 function jscommon() {
-  return src(CONF.JS.SOURCE, { sourcemaps: true })
-    .pipe(concat('common.min.js'))
+	return webpackStream(webpackConfig, webpack)
     .pipe(dest(CONF.JS.OUTPUT, { sourcemaps: true }))
 }
+// function jscommon() {
+//   return src(CONF.JS.SOURCE, { sourcemaps: true })
+// 		.pipe(
+// 			babel({
+// 				presets: ['@babel/env'],
+// 			}),
+// 		)
+//     .pipe(concat('common.min.js'))
+// 		.pipe(uglify())
+//     .pipe(dest(CONF.JS.OUTPUT, { sourcemaps: true }))
+// }
 
 const browserSyncOption = {
   port: 5000,
@@ -67,6 +90,7 @@ function watchFiles(done) {
     browserSync.reload();
     done();
   };
+	watch(CONF.HTML.SOURCE).on('change', series(browserReload));
   watch(CONF.SASS.SOURCE).on('change', series(css, browserReload));
 	watch(CONF.JS.LIB).on('change', series(jslib, browserReload));
   watch(CONF.JS.SOURCE).on('change', series(jscommon, browserReload));

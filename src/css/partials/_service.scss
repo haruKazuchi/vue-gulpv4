@@ -1,0 +1,63 @@
+#service{
+	background-color: #f6f6f6;
+	z-index: 1;
+	position: relative;
+	&:after{
+		content: "";
+		position: absolute;
+		box-sizing: border-box;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		margin-left: -50px;
+		background-image: url('../img/service.png');
+		background-repeat: no-repeat;
+		background-position: right center;
+		z-index: -1;
+		@include CUSTOM(1230px){
+			margin-left: 0;
+			background-position: center center;
+			background-size: contain;
+			opacity: .5;
+		}
+	}
+	.container{
+		box-sizing: border-box;
+		@include PC{
+			padding: 286px 20px;
+		}
+	}
+	.service-box{
+		.title{
+			font-family: $fontOpenSans;
+			position: relative;
+			font-weight: bold;
+			@include PC{
+				font-size: 53px;
+				padding-bottom: 25px;
+				margin-bottom: 55px;
+			}
+			&:after{
+				content: "";
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 25px;
+				height: 2px;
+				background-color: #000;
+			}
+		}
+		.text{
+			color: rgb(136, 136, 136);
+			@include PC{
+				font-size: 18px;
+				line-height: 1.444;
+				max-width: 400px;
+			}
+			@include CUSTOM(1230px){
+				color: #000;
+			}
+		}
+	}
+}
